@@ -91,8 +91,6 @@ Attribute FormatReport.VB_ProcData.VB_Invoke_Func = " \n14"
         UsersWithMultipleDevicesHandler
     End If
     
-    wb.Activate
-    
     Unload AmgenReportsForm
     
 End Sub

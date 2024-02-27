@@ -10,7 +10,7 @@ Sub DEP_Report_Handler()
     Debug.Print (depReport.Name)
     
     For Each wb In Workbooks
-        If wb.Name <> depReport.Name And wb.Name Like "*Device In Tangoe Not In DEP*" Then
+        If wb.Name <> depReport.Name And wb.Name Like "*In Tangoe Not In DEP*" Then
             wb.Activate
             Exit For
         End If
@@ -41,6 +41,8 @@ Sub DEP_Report_Handler()
         .AutoFilter Field:=5, Criteria1:="#N/D", Operator:=xlAnd
         .AutoFilter Field:=7, Criteria1:="#N/D"
     End With
+    
+    depReport.Close
 End Sub
 
 Sub OpenActivitiesReportHandler()
@@ -75,8 +77,11 @@ End Sub
 Sub UsersWithMultipleDevicesHandler()
     Dim sourceData As range
     Dim dest As range
+    Dim multiDevicesPivot As Worksheet
     Dim lastCell As Long: lastCell = Utils.FindLastCellInColumn()
     Dim pivotTableName As String: pivotTableName = "Multi Device Users Pivot Table"
+    Dim sheetName As String: sheetName = "Multi Device Users Pivot"
+    
     Sheets.Add.Name = "Comparison"
     Sheets("Raw Data Pivot").range("A4").currentRegion.Copy
     
@@ -121,12 +126,14 @@ Sub UsersWithMultipleDevicesHandler()
     ActiveSheet.AutoFilterMode = False
     
     ' Create Pivot Table
-    Sheets.Add.Name = "Multi Device Users Pivot"
+    Sheets.Add.Name = sheetName
+    Set multiDevicesPivot = Sheets(sheetName)
     
     Set sourceData = Sheets("Multi Device Users").range("A1").currentRegion
-    Set dest = Sheets("Multi Device Users Pivot").range("A3")
+    Set dest = multiDevicesPivot.range("A3")
+    dest.Activate
     
-    Utils.CreatePivotTable sourceData, dest, pivotTableName
+    ActiveWorkbook.PivotCaches.Create(SourceType:=xlDatabase, sourceData:=sourceData, Version:=8).CreatePivotTable TableDestination:=dest, TableName:=pivotTableName, DefaultVersion:=8
     
     With ActiveSheet.PivotTables(pivotTableName)
         .AddDataField .PivotFields("Group"), "Count of Group", xlCount
