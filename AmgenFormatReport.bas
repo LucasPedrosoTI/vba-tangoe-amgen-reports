@@ -142,7 +142,6 @@ Sub FormatAirwatchVsTangoeReport(ByVal region As String)
     Columns("L:AW").Delete Shift:=xlToLeft
     
     lastCell = Utils.FindLastCellInColumn()
-    
 
     Sheets.Add.Name = "Pivot"
     
@@ -159,6 +158,8 @@ Sub FormatAirwatchVsTangoeReport(ByVal region As String)
     End With
     
     FormatPivotTable "other", "Pivot Table"
+    
+    wb.Close
     
     Unload AmgenReportsForm
     
