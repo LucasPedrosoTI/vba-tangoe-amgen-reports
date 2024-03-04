@@ -112,6 +112,7 @@ Sub FormatAirwatchVsTangoeReport(ByVal region As String)
     
     Set rg = ActiveSheet.range("A1").currentRegion.Rows(1)
     
+    ' Custom filters per region
     With rg
         .AutoFilter Field:=110, Criteria1:="#N/D"
         .AutoFilter Field:=24, Criteria1:="Enrolled"
@@ -119,21 +120,27 @@ Sub FormatAirwatchVsTangoeReport(ByVal region As String)
         .AutoFilter Field:=69, Criteria1:=Array("Consultant", "Staff", "Temp"), Operator:=xlFilterValues
         If region = "LATAM" Then
             .AutoFilter Field:=76, Criteria1:="LATAM"
+        ElseIf region = "NA" Then
+            .AutoFilter Field:=76, Criteria1:=Array("Canada", "Puerto Rico", "United States"), Operator:=xlFilterValues
         Else
             .AutoFilter Field:=76, Criteria1:="=JAPAC", Operator:=xlOr, Criteria2:="=SG"
         End If
     End With
     
+    ' Copy the data
     range("I:CC").Copy
     
+    ' Create a new workbook
     Workbooks.Add
     ActiveSheet.Name = "Raw Data"
     
+    ' Paste the data there
     range("A1").PasteSpecial xlPasteValues
     Application.CutCopyMode = False
     
     Cells.EntireColumn.AutoFit
    
+    ' Delete unwanted columns
     Columns("F:F").Delete Shift:=xlToLeft
     Columns("G:I").Delete Shift:=xlToLeft
     Columns("H:I").Delete Shift:=xlToLeft
@@ -143,6 +150,7 @@ Sub FormatAirwatchVsTangoeReport(ByVal region As String)
     
     lastCell = Utils.FindLastCellInColumn()
 
+    ' Create and format pivot table
     Sheets.Add.Name = "Pivot"
     
     Utils.CreatePivotTable "Raw Data!R1C1:R" & lastCell & "C12", "Pivot!R3C1", "Pivot Table"

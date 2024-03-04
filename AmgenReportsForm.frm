@@ -22,6 +22,10 @@ Private Sub ToggleButton_AirwatchVsTangoe_LATAM_Click()
     AmgenFormatReport.FormatAirwatchVsTangoeReport "LATAM"
 End Sub
 
+Private Sub ToggleButton_AirwatchVsTangoe_NA_Click()
+    AmgenFormatReport.FormatAirwatchVsTangoeReport "NA"
+End Sub
+
 Private Sub ToggleButton_Cancel_Click()
     Unload Me
 End Sub
