@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} AmgenReportsForm 
    Caption         =   "Reports"
-   ClientHeight    =   11550
-   ClientLeft      =   -210
-   ClientTop       =   -750
-   ClientWidth     =   9960.001
+   ClientHeight    =   10005
+   ClientLeft      =   -150
+   ClientTop       =   -510
+   ClientWidth     =   9945.001
    OleObjectBlob   =   "AmgenReportsForm.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -30,6 +30,10 @@ Private Sub ToggleButton_Cancel_Click()
     Unload Me
 End Sub
 
+Private Sub ToggleButton_FormatGlobalSeedstockDevices_Click()
+    AmgenFormatReport.FormatGlobalSeedstockReport
+End Sub
+
 Private Sub ToggleButton_LineToInactiveUsers_Click()
     AmgenFormatReport.FormatReport "LinesToInactiveUsers"
 End Sub
@@ -40,6 +44,10 @@ End Sub
 
 Private Sub ToggleButton_OpenActivities_Click()
     AmgenFormatReport.FormatReport "OpenActivities"
+End Sub
+
+Private Sub ToggleButton_OpenSupportRequests_Click()
+    AmgenFormatReport.FormatReport "OpenSupportRequests"
 End Sub
 
 Private Sub ToggleButton_PendingDestructionDevices_Click()

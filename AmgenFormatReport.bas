@@ -24,7 +24,13 @@ Attribute FormatReport.VB_ProcData.VB_Invoke_Func = " \n14"
         ws.Name = "Raw Data"
     End If
         
-    Set sourceData = ws.range("A1").currentRegion
+    Set sourceData = ws.range("A1").CurrentRegion
+    
+    If sourceData.Rows.Count < 2 Then
+        MsgBox "Looks like the sheet doesn't have enough data"
+        Unload AmgenReportsForm
+        Exit Sub
+    End If
     
     ' Replace unwanted values
     ReplaceUnwantedValues reportName
@@ -32,21 +38,23 @@ Attribute FormatReport.VB_ProcData.VB_Invoke_Func = " \n14"
     ' Convert String Numbers to Numbers
     Call ConvertNumbers
     
-    ' TODO: Add Columns with formulas
     If reportName = "OpenActivities" Then
         Call OpenActivitiesReportHandler
-        Set sourceData = ws.range("A1").currentRegion
+        Set sourceData = ws.range("A1").CurrentRegion
+    ElseIf reportName = "OpenSupportRequests" Then
+        Call OpenSupportRequestsReportHandler
+        Set sourceData = ws.range("A1").CurrentRegion
     End If
         
 
     If reportName = "TangoeVsAirwatch" Then
         Call TangoeVsAirwatchHandler
-        Set sourceData = Sheets("Non Seedstock & Not in AW").range("A1").currentRegion
+        Set sourceData = Sheets("Non Seedstock & Not in AW").range("A1").CurrentRegion
     End If
     
     If reportName = "DEPReport" Then
         Call DEP_Report_Handler
-        Set sourceData = ws.range("A1").currentRegion
+        Set sourceData = ws.range("A1").CurrentRegion
     End If
     
     Cells.EntireColumn.AutoFit
@@ -72,6 +80,8 @@ Attribute FormatReport.VB_ProcData.VB_Invoke_Func = " \n14"
             Call AmgenFieldsHandler.Amgen_Add_DEPReport_Fields
         Case "OpenActivities"
             Call AmgenFieldsHandler.Amgen_Add_OpenActivities_Field
+        Case "OpenSupportRequests"
+            Call AmgenFieldsHandler.Amgen_Add_OpenSupportRequests_Field
         Case "SeedstockDevices"
             Call AmgenFieldsHandler.Amgen_Add_SeedstockDevices_Fields
         Case "PendingDestructionDevices"
@@ -100,6 +110,7 @@ Sub FormatAirwatchVsTangoeReport(ByVal region As String)
 '
 '
     Dim rg As range
+    Dim rng As range
     Dim lastCell As Long
     Dim wb As Workbook
     
@@ -110,25 +121,38 @@ Sub FormatAirwatchVsTangoeReport(ByVal region As String)
     
     ActiveSheet.AutoFilterMode = False
     
-    Set rg = ActiveSheet.range("A1").currentRegion.Rows(1)
+    Set rg = ActiveSheet.range("A1").CurrentRegion.Rows(1)
     
     ' Custom filters per region
     With rg
-        .AutoFilter Field:=110, Criteria1:="#N/D"
-        .AutoFilter Field:=24, Criteria1:="Enrolled"
+        .AutoFilter Field:=111, Criteria1:="#N/D"
+        .AutoFilter Field:=25, Criteria1:="Enrolled"
         .AutoFilter Field:=2, Criteria1:="Amgen Corporate"
-        .AutoFilter Field:=69, Criteria1:=Array("Consultant", "Staff", "Temp"), Operator:=xlFilterValues
+        .AutoFilter Field:=70, Criteria1:=Array("Consultant", "Staff", "Temp"), Operator:=xlFilterValues
         If region = "LATAM" Then
-            .AutoFilter Field:=76, Criteria1:="LATAM"
+            .AutoFilter Field:=77, Criteria1:="LATAM"
         ElseIf region = "NA" Then
-            .AutoFilter Field:=76, Criteria1:=Array("Canada", "Puerto Rico", "United States"), Operator:=xlFilterValues
+            .AutoFilter Field:=77, Criteria1:=Array("Canada", "Puerto Rico", "United States"), Operator:=xlFilterValues
         Else
-            .AutoFilter Field:=76, Criteria1:="=JAPAC", Operator:=xlOr, Criteria2:="=SG"
+            .AutoFilter Field:=77, Criteria1:="=JAPAC", Operator:=xlOr, Criteria2:="=SG"
         End If
     End With
     
+       
+    ' Check the number of visible rows
+    'On Error Resume Next ' In case there are no visible cells
+    'Set rng = range("A2:A" & Cells(Rows.Count, "A").End(xlUp).Row).SpecialCells(xlCellTypeVisible)
+    'On Error GoTo 0
+    
+    'If rng.Rows.Count < 2 Then
+    '    MsgBox "Not enough data"
+    '    Unload AmgenReportsForm
+    '    Exit Sub
+    'End If
+        
+    
     ' Copy the data
-    range("I:CC").Copy
+    range("J:CD").Copy
     
     ' Create a new workbook
     Workbooks.Add
@@ -171,4 +195,27 @@ Sub FormatAirwatchVsTangoeReport(ByVal region As String)
     
     Unload AmgenReportsForm
     
+End Sub
+
+Sub FormatGlobalSeedstockReport()
+    With ActiveSheet.PivotTables("Pivot Table").PivotFields("Person")
+        .PivotItems("Horizon Verizon Seedstock").Visible = False
+        .PivotItems("Horizon AT&T Seedstock").Visible = False
+        .PivotItems("Mobility Test Device Seedstock").Visible = False
+        .PivotItems("Promotional Seedstock").Visible = False
+        .PivotItems("Puerto Rico Seedstock").Visible = False
+        .PivotItems("CCXI Seedstock  Sweet").Visible = False
+        .PivotItems("Teze iPad Seedstock").Visible = False
+        .PivotItems("Shared ADL Operations Seedstock").Visible = False
+        .PivotItems("Shared AML Operations Seedstock").Visible = False
+        .PivotItems("Shared ARI Operations Seedstock").Visible = False
+        .PivotItems("Shared ATO Operations Seedstock").Visible = False
+        .PivotItems("Submission and Launch Project Seedstock").Visible = False
+        .PivotItems("US EVIP Seedstock").Visible = False
+        .PivotItems("US Replacement Seedstock").Visible = False
+        .PivotItems("US Sales Seedstock").Visible = False
+        .PivotItems("US Used Seedstock").Visible = False
+        .PivotItems("USTO Seedstock").Visible = False
+    End With
+    Unload AmgenReportsForm
 End Sub

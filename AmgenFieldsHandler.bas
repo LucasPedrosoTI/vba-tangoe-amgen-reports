@@ -96,10 +96,29 @@ Sub Amgen_Add_OpenActivities_Field()
         .PivotFields("Person Activity For Group").Orientation = xlRowField
     End With
     
-    range("A3").currentRegion.Copy range("A" & Utils.FindLastCellInColumn + 3)
+    range("A3").CurrentRegion.Copy range("A" & Utils.FindLastCellInColumn + 3)
     
     With Sheets("Pivot").PivotTables(1)
         .PivotFields("Person Activity For Group").Orientation = xlHidden
+        .PivotFields("Count of ID").Orientation = xlHidden
+        
+        .PivotFields("ID").Orientation = xlRowField
+        .AddDataField .PivotFields("Days Open"), "Sum of Days Open", xlSum
+    End With
+End Sub
+
+Sub Amgen_Add_OpenSupportRequests_Field()
+    Dim pivot As PivotTable
+    Set pivot = ActiveWorkbook.Sheets("Pivot").PivotTables("Pivot Table")
+    With pivot
+        .AddDataField pivot.PivotFields("ID"), "Count of ID", xlCount
+        .PivotFields("On Behalf Of Group").Orientation = xlRowField
+    End With
+    
+    range("A3").CurrentRegion.Copy range("A" & Utils.FindLastCellInColumn + 3)
+    
+    With Sheets("Pivot").PivotTables(1)
+        .PivotFields("On Behalf Of Group").Orientation = xlHidden
         .PivotFields("Count of ID").Orientation = xlHidden
         
         .PivotFields("ID").Orientation = xlRowField

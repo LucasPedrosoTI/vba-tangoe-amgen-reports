@@ -3,7 +3,7 @@ Option Private Module
 
 Sub ReplaceUnwantedValues(ByVal reportName As String)
     
-    ActiveSheet.range("A1").currentRegion.Select
+    ActiveSheet.range("A1").CurrentRegion.Select
     
     Selection.Replace What:="-> ", Replacement:="", LookAt:=xlPart, _
         SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
@@ -32,20 +32,20 @@ Sub ReplaceUnwantedValues(ByVal reportName As String)
 
         
     For Each cell In Selection.Rows(1).Cells
-        If cell.value = "Total Charges" Then
-           cell.value = "Total Charges Dollar"
-        ElseIf cell.value = "Active?" Then
-            cell.value = "Person Active?"
-        ElseIf cell.value = "Inactive At" Then
-            cell.value = "Person Inactive At"
-        ElseIf cell.value = "Created" Then
+        If cell.Value = "Total Charges" Then
+           cell.Value = "Total Charges Dollar"
+        ElseIf cell.Value = "Active?" Then
+            cell.Value = "Person Active?"
+        ElseIf cell.Value = "Inactive At" Then
+            cell.Value = "Person Inactive At"
+        ElseIf cell.Value = "Created" Then
             If reportName = "SeedstockDevices" Or reportName = "PendingDestructionDevices" Or reportName = "TangoeVsAirwatch" Or reportName = "DEPReport" Then
-                cell.value = "Device Created"
+                cell.Value = "Device Created"
             Else
-                cell.value = "Line Created"
+                cell.Value = "Line Created"
             End If
         End If
-        cell.value = Trim(cell.value)
+        cell.Value = Trim(cell.Value)
     Next cell
 End Sub
 
@@ -97,7 +97,7 @@ Sub Amgen_FormatDate()
     For Each col In rng.Columns
         Set cell = col.Cells(4, 1)
         ' Check if the cell is formatted as a date or can be interpreted as a date
-        If IsDate(cell.value) Then
+        If IsDate(cell.Value) Then
             col.EntireColumn.NumberFormat = "d-mmm-yy"
         End If
     Next col

@@ -33,11 +33,11 @@ Sub DEP_Report_Handler()
     
     range("G2").AutoFill destination:=range("G2:G" & lastCell)
     
-    range("A1").currentRegion.Copy
-    range("A1").currentRegion.PasteSpecial Paste:=xlPasteValues
+    range("A1").CurrentRegion.Copy
+    range("A1").CurrentRegion.PasteSpecial Paste:=xlPasteValues
     Application.CutCopyMode = False
     
-    With range("A1").currentRegion.Rows(1)
+    With range("A1").CurrentRegion.Rows(1)
         .AutoFilter Field:=5, Criteria1:="#N/D", Operator:=xlAnd
         .AutoFilter Field:=7, Criteria1:="#N/D"
     End With
@@ -48,8 +48,8 @@ End Sub
 Sub OpenActivitiesReportHandler()
     Dim lastCell As Long: lastCell = Utils.FindLastCellInColumn()
     
-    ActiveSheet.range("J1").value = "Today"
-    ActiveSheet.range("K1").value = "Days Open"
+    ActiveSheet.range("J1").Value = "Today"
+    ActiveSheet.range("K1").Value = "Days Open"
     
     ActiveSheet.range("J2").FormulaR1C1 = "=TODAY()"
     ActiveSheet.range("K2").FormulaR1C1 = "=DAYS(RC[-1],RC[-3])"
@@ -60,18 +60,33 @@ Sub OpenActivitiesReportHandler()
     End If
 End Sub
 
+Sub OpenSupportRequestsReportHandler()
+    Dim lastCell As Long: lastCell = Utils.FindLastCellInColumn()
+    
+    ActiveSheet.range("M1").Value = "Today"
+    ActiveSheet.range("N1").Value = "Days Open"
+    
+    ActiveSheet.range("M2").FormulaR1C1 = "=TODAY()"
+    ActiveSheet.range("N2").FormulaR1C1 = "=DAYS(RC[-1],RC[-3])"
+    
+    If lastCell > 2 Then
+        ActiveSheet.range("M2").AutoFill destination:=range("M2:M" & lastCell)
+        ActiveSheet.range("N2").AutoFill destination:=range("N2:N" & lastCell)
+    End If
+End Sub
+
 Sub TangoeVsAirwatchHandler()
     Dim rg As range
     Dim rawDataName As String: rawDataName = "Raw Data All Devices"
     Dim nonAWName As String: nonAWName = "Non Seedstock & Not in AW"
     ActiveSheet.Name = rawDataName
-    Set rg = ActiveSheet.range("A1").currentRegion.Rows(1)
+    Set rg = ActiveSheet.range("A1").CurrentRegion.Rows(1)
     With rg
         .AutoFilter Field:=4, Criteria1:="<>*seedstock*", Operator:=xlAnd
         .AutoFilter Field:=10, Criteria1:="="
     End With
     Sheets.Add.Name = nonAWName
-    Sheets(rawDataName).range("A1").currentRegion.Copy destination:=Sheets(nonAWName).range("A1")
+    Sheets(rawDataName).range("A1").CurrentRegion.Copy destination:=Sheets(nonAWName).range("A1")
 End Sub
 
 Sub UsersWithMultipleDevicesHandler()
@@ -83,7 +98,7 @@ Sub UsersWithMultipleDevicesHandler()
     Dim sheetName As String: sheetName = "Multi Device Users Pivot"
     
     Sheets.Add.Name = "Comparison"
-    Sheets("Raw Data Pivot").range("A4").currentRegion.Copy
+    Sheets("Raw Data Pivot").range("A4").CurrentRegion.Copy
     
     Sheets("Comparison").range("A1").PasteSpecial Paste:=xlPasteValues
     Application.CutCopyMode = False
@@ -94,7 +109,7 @@ Sub UsersWithMultipleDevicesHandler()
     Cells.EntireRow.AutoFit
     Cells.EntireColumn.AutoFit
     
-    range("A1").currentRegion.Rows(1).AutoFilter Field:=2, Criteria1:=""
+    range("A1").CurrentRegion.Rows(1).AutoFilter Field:=2, Criteria1:=""
     
     For i = lastCell To 2 Step -1
         If Not ActiveSheet.Cells(i, 1).EntireRow.Hidden Then
@@ -104,18 +119,18 @@ Sub UsersWithMultipleDevicesHandler()
     
     ActiveSheet.AutoFilterMode = False
       
-    range("E1").value = "Concatanate"
+    range("E1").Value = "Concatanate"
     range("E2").FormulaR1C1 = "=CONCAT(RC[-1],""^"",RC[-2])"
     range("E2").AutoFill destination:=range("E2:E" & Utils.FindLastCellInColumn())
 
-    range("A1").currentRegion.Copy
+    range("A1").CurrentRegion.Copy
     Sheets.Add.Name = "Multi Device Users"
     range("A1").PasteSpecial xlPasteValues
     
     Cells.EntireColumn.AutoFit
     Cells.EntireRow.AutoFit
     
-    range("A1").currentRegion.Rows(1).AutoFilter Field:=5, Criteria1:=Array("^1", "1^", "1^1"), Operator:=xlFilterValues
+    range("A1").CurrentRegion.Rows(1).AutoFilter Field:=5, Criteria1:=Array("^1", "1^", "1^1"), Operator:=xlFilterValues
     
     For i = Utils.FindLastCellInColumn To 2 Step -1
         If Not ActiveSheet.Cells(i, 1).EntireRow.Hidden Then
@@ -129,7 +144,7 @@ Sub UsersWithMultipleDevicesHandler()
     Sheets.Add.Name = sheetName
     Set multiDevicesPivot = Sheets(sheetName)
     
-    Set sourceData = Sheets("Multi Device Users").range("A1").currentRegion
+    Set sourceData = Sheets("Multi Device Users").range("A1").CurrentRegion
     Set dest = multiDevicesPivot.range("A3")
     dest.Activate
     

@@ -10,10 +10,10 @@ Sub CurrentColumnToText()
 End Sub
 Sub ConvertNumbers()
     Dim sourceData As range
-    Set sourceData = ActiveSheet.range("A1").currentRegion
+    Set sourceData = ActiveSheet.range("A1").CurrentRegion
     For Each cell In sourceData.Cells()
-        If IsNumeric(cell.value) And cell.NumberFormat = "@" And Len(cell.value) < 15 Then ' "@" is the format for text and 15 is the length of IMEIs
-            cell.value = Val(cell.value) ' Convert text to number
+        If IsNumeric(cell.Value) And cell.NumberFormat = "@" And Len(cell.Value) < 15 Then ' "@" is the format for text and 15 is the length of IMEIs
+            cell.Value = Val(cell.Value) ' Convert text to number
         End If
     Next cell
 End Sub
