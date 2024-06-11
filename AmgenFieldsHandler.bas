@@ -67,6 +67,15 @@ Sub Amgen_Add_ZeroUsageLines_Fields()
      End With
 End Sub
 
+Sub Amgen_Add_ReturnDeviceActivities_Fields()
+    With ActiveWorkbook.Sheets("Pivot").PivotTables("Pivot Table")
+        .PivotFields("Person Activity For Group").Orientation = xlRowField
+        .PivotFields("Person Activity For").Orientation = xlRowField
+        .PivotFields("Created").Orientation = xlRowField
+        .AddDataField .PivotFields("ID"), "Count Of ID", xlCount
+    End With
+End Sub
+
 Sub Amgen_Add_DEPReport_Fields()
     Dim pivot As PivotTable: Set pivot = ActiveWorkbook.Sheets("Pivot").PivotTables("Pivot Table")
     With pivot

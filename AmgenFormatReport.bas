@@ -44,6 +44,9 @@ Attribute FormatReport.VB_ProcData.VB_Invoke_Func = " \n14"
     ElseIf reportName = "OpenSupportRequests" Then
         Call OpenSupportRequestsReportHandler
         Set sourceData = ws.range("A1").CurrentRegion
+    ElseIf reportName = "ReturnDeviceActivities" Then
+        Call ReturnDeviceActivitiesHandler
+        Set sourceData = ws.range("A1").CurrentRegion
     End If
         
 
@@ -87,7 +90,9 @@ Attribute FormatReport.VB_ProcData.VB_Invoke_Func = " \n14"
         Case "PendingDestructionDevices"
             Call AmgenFieldsHandler.Amgen_Add_PendingDestructionDevices_Fields
         Case "UsersWithMultipleDevices"
-            AmgenFieldsHandler.Amgen_Add_UsersWithMultipleDevices_Fields
+            Call AmgenFieldsHandler.Amgen_Add_UsersWithMultipleDevices_Fields
+        Case "ReturnDeviceActivities"
+            Call AmgenFieldsHandler.Amgen_Add_ReturnDeviceActivities_Fields
         Case Else
             MsgBox "Report Name Not Found, Not adding any fields to table"
     End Select

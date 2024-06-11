@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} AmgenReportsForm 
    Caption         =   "Reports"
-   ClientHeight    =   10005
+   ClientHeight    =   10755
    ClientLeft      =   -150
    ClientTop       =   -510
-   ClientWidth     =   9945.001
+   ClientWidth     =   9855.001
    OleObjectBlob   =   "AmgenReportsForm.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -52,6 +52,10 @@ End Sub
 
 Private Sub ToggleButton_PendingDestructionDevices_Click()
     AmgenFormatReport.FormatReport "PendingDestructionDevices"
+End Sub
+
+Private Sub ToggleButton_ReturnDeviceActivities_Click()
+    AmgenFormatReport.FormatReport "ReturnDeviceActivities"
 End Sub
 
 Private Sub ToggleButton_SeedstockDevices_Click()

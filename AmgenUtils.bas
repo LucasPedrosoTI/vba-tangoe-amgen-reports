@@ -17,7 +17,7 @@ Sub ReplaceUnwantedValues(ByVal reportName As String)
     Selection.Replace What:="EST", Replacement:="", LookAt:=xlPart, _
         SearchOrder:=xlByRows, MatchCase:=True, SearchFormat:=False, _
         ReplaceFormat:=False, FormulaVersion:=xlReplaceFormula2
-    Selection.Replace What:="edt", Replacement:="", LookAt:=xlPart, _
+    Selection.Replace What:="EDT", Replacement:="", LookAt:=xlPart, _
         SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
         ReplaceFormat:=False, FormulaVersion:=xlReplaceFormula2
     Selection.Replace What:="Line Bill ", Replacement:="", LookAt:=xlPart, _
@@ -41,6 +41,8 @@ Sub ReplaceUnwantedValues(ByVal reportName As String)
         ElseIf cell.Value = "Created" Then
             If reportName = "SeedstockDevices" Or reportName = "PendingDestructionDevices" Or reportName = "TangoeVsAirwatch" Or reportName = "DEPReport" Then
                 cell.Value = "Device Created"
+            ElseIf reportName = "ReturnDeviceActivities" Then
+                '
             Else
                 cell.Value = "Line Created"
             End If

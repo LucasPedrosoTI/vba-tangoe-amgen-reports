@@ -89,6 +89,19 @@ Sub TangoeVsAirwatchHandler()
     Sheets(rawDataName).range("A1").CurrentRegion.Copy destination:=Sheets(nonAWName).range("A1")
 End Sub
 
+Sub ReturnDeviceActivitiesHandler()
+    Dim i As Long
+    
+    ' Deletes all rows that has Created after 28 days befores
+     For i = ActiveSheet.Cells(ActiveSheet.Rows.Count, "A").End(xlUp).Row To 2 Step -1
+        If IsDate(ActiveSheet.Cells(i, 6).Value) Then
+            If ActiveSheet.Cells(i, 6).Value >= DateAdd("d", -28, Date) Then
+                ActiveSheet.Rows(i).Delete
+            End If
+        End If
+    Next i
+End Sub
+
 Sub UsersWithMultipleDevicesHandler()
     Dim sourceData As range
     Dim dest As range
